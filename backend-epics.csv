@@ -1,0 +1,9 @@
+Issue Type,Epic Name,Summary,Description
+Epic,Backend Foundation,Backend base setup,Setup Node.js Express folder structure env config logging
+Epic,Authentication & Users,User authentication system,Register login JWT role switching buyer seller
+Epic,Location & Property Management,Property and location management,Provinces cities districts properties CRUD
+Epic,Media & File Handling,Media upload system,Image upload watermark video walkthrough support
+Epic,Search & Filters,Advanced search and filtering,Price location rooms property type filters
+Epic,Trust & Verification,Verified listings system,Admin verification badge fraud prevention
+Epic,Performance & Optimization,Backend performance optimization,Caching compression low bandwidth optimization
+Epic,Deployment & DevOps,Deployment and DevOps,Production deployment CI CD environment setup

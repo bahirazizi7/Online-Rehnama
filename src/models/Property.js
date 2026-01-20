@@ -5,16 +5,19 @@ const propertySchema = new mongoose.Schema(
         title: {
             type: String,
             required: true,
+            index:true
         },
         price: {
             amount: { type: Number, required: true },
             currency: { type: String, default: 'USD' },
+            index:true
         },
         propertyType:
         {
             type: String,
             enum: ['apartment', 'house', 'villa', 'land', 'commercial'],
-            required: true
+            required: true,
+            index:true
         },
         status: {
             type: String,
@@ -35,18 +38,20 @@ const propertySchema = new mongoose.Schema(
         },
         location: {
             address: { type: String, required: true },
-            province: { type: String, required: true, lowercase: true, trim: true },
-            city: { type: String, required: true, lowercase: true, trim: true },
+            province: { type: String, required: true, lowercase: true, trim: true, index:true },
+            city: { type: String, required: true, lowercase: true, trim: true, index:true },
             state: { type: String },
             zipCode: { type: String },
             coordinates: {
                 type: [Number],
                 required: true,
+                index:true, 
                 validate: {
                     validator: (val) => val.length === 2,
                     message: "Coordinates must be [longitude, latitude]"
                 }
             }
+            
         },
         specs: {
             bedrooms: { type: Number, default: 0 },
@@ -75,11 +80,27 @@ const propertySchema = new mongoose.Schema(
         toObject: { virtuals: true }
     }
 );
-
+propertySchema.index({ 
+    title: "text", 
+    description: "text",
+    "location.city": "text",
+    "location.province": "text" 
+});
 propertySchema.index({ "location.province": 1, "location.city": 1 });
 propertySchema.index({ "location.coordinates": "2dsphere" });
 propertySchema.index({ "location.province": 1, "location.city": 1 }); // Region-based browsing
 propertySchema.index({ listingType: 1, status: 1, "price.amount": 1 }); // The "Search Results" index
 propertySchema.index({ title: "text", description: "text" });
+
+propertySchema.virtual('formattedPrice').get(function() {
+    return new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: this.price.currency
+    }).format(this.price.amount);
+});
+
+propertySchema.virtual('fullAddress').get(function() {
+    return `${this.location.address}, ${this.location.city}, ${this.location.province}`;
+});
 
 module.exports = mongoose.model("Property", propertySchema);

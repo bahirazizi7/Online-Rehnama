@@ -33,7 +33,10 @@ const user = new mongoose.Schema(
       enum: ["buyer", "seller", "admin", "agent"],
       default: "buyer"
     },
-
+    activeRole:{
+      type:String,
+      default:"buyer"
+    },
 
 
     favorites: [
@@ -49,7 +52,11 @@ const user = new mongoose.Schema(
     isEmailVerified: { type: Boolean, default: false },
     isIdentityVerified: { type: Boolean, default: false },
     lastLogin: Date,
-    status: { type: String, enum: ["active", "suspended"], default: "active" }
+    status: { type: String, enum: ["active", "suspended"], default: "active" },
+
+    verifyToken: { type: String },
+    verifyTokenExpiry: { type: Date },
+
   },
   { timestamps: true }
 );

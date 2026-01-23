@@ -4,42 +4,47 @@ const bcrypt = require("bcrypt");
 
 const user = new mongoose.Schema(
   {
-   
-    firstName: { type: String, required: true, trim: true },
-    lastName: { type: String , trim: true },
-    email: { 
-      type: String, 
-      required: true, 
-      unique: true, 
-      lowercase: true,
-      index: true 
-    },
-    password: { type: String, required: true, select: false },  
-    avatar: { type: String, default: "default-avatar.png" },
-    phone: { type: String, required: true },
 
-  
+    firstName: { type: String, required: true, trim: true },
+    lastName: { type: String, trim: true },
+    email: {
+      type: String,
+      required: [true, "Email is required"],
+      unique: true,
+      lowercase: true,
+      trim: true
+    },
+    password: {
+      type: String,
+      required: [true, "Password is required"],
+      minlength: [8, "Password must be at least 8 characters"],
+      select: false,
+    },
+    avatar: { type: String, default: "default-avatar.png" },
+    phone: {
+      type: String,
+      required: [true, "Phone number is required"],
+      trim: true
+    },
+
+
     role: {
       type: String,
-      enum: ["user", "agent", "admin"],
-      default: "user"
+      enum: ["buyer", "seller", "admin", "agent"],
+      default: "buyer"
     },
 
-    agentProfile: {
-      agencyName: String,
-      licenseNumber: String,
-      bio: String,
-      specialties: [String], 
-      socialLinks: {
-        whatsapp: String,
-        facebook: String
+
+
+    favorites: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Property",
+        savedAt: { type: Date, default: Date.now }
       }
-    },
+    ],
 
-    
-    favorites: [{ type: mongoose.Schema.Types.ObjectId, ref: "Property" }],
-    myListings: [{ type: mongoose.Schema.Types.ObjectId, ref: "Property" }],
-    
+
 
     isEmailVerified: { type: Boolean, default: false },
     isIdentityVerified: { type: Boolean, default: false },
@@ -50,7 +55,7 @@ const user = new mongoose.Schema(
 );
 
 
-user.virtual('fullName').get(function() {
+user.virtual('fullName').get(function () {
   return `${this.firstName} ${this.lastName}`;
 });
 

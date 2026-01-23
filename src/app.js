@@ -1,13 +1,21 @@
-const express = require('express')
-const cors = require('cors')
-const morgan = require('morgan')
+const express = require("express");
+const cors = require("cors");
+const morgan = require("morgan");
+
 const errorHandler = require("./middlewares/error.middleware");
-const app = express()
+const authRoutes = require("./routes/auth.routes");
 
-app.use(cors())
-app.use(express.json())
-app.use(morgan('dev'))
-app.use(errorHandler)
+const app = express();
 
 
-module.exports = app
+app.use(cors());
+app.use(express.json());
+app.use(morgan("dev"));
+
+
+app.use("/api/auth", authRoutes);
+
+
+app.use(errorHandler);
+
+module.exports = app;

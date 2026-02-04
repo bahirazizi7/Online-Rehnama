@@ -4,7 +4,8 @@ const jwt = require("../../utils/jwt");
 const asyncHandler = require("../../middlewares/asyncHandler");
 const ApiError = require("../../utils/ApiError");
 const ApiResponse = require("../../utils/ApiResponse");
-const { sendVerificationEmail, sendWelcomeEmail } = require("../../services/email.service");
+const { sendVerificationEmail, sendWelcomeEmail } = require("../../services/emai.service.js");
+
 
 const signupController = asyncHandler(async (req, res) => {
     const { firstName, lastName, email, phone, password, role } = req.body;

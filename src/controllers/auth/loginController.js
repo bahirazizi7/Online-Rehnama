@@ -25,6 +25,10 @@ const loginController = asyncHandler(async (req, res) => {
     throw new ApiError(403, "Account is suspended");
   }
 
+  if(user.isEmailVerified== false){
+    throw new ApiError(403, "Please verifiy your email");
+  }
+
 
   const isMatch = await bcrypt.compare(password, user.password);
 
